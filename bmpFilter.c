@@ -75,28 +75,30 @@ void applyGrayscaleToPixel(unsigned char* pixel) {
 void applyThresholdToPixel(unsigned char* pixel) {
   //#7 Write the new value of the pixel using getAverageIntensity(blue, green, red)
   
+#ifdef DEBUG
+  printf("current pixel= %p\n", currentPixel);
+#endif
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
-  //#6 Filter each pixel to update it in the pixel array
   //if isGrayscale then applyGrayscaleToPixel() else applyThresholdToPixel()
-  
+  if (isGrayscale) {
+    applyGrayscaleToPixel(pixel);
+  }
+  else {
+    applyThresholdToPixel(pixel);
+  }
 }
 
 void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
-  //#5 Iterate over each pixel in a row calling applyFilterToPixel(pixel, isGrayscale) on each
   int pixelSize = 3;
   unsigned char* currentPixel = row;
 
+  //Iterates through each pixel calling applyFilterToPixel()
   for (size_t i = 0; i < width; i++) {
     applyFilterToPixel(currentPixel, isGrayscale);
     currentPixel += pixelSize;
   }
-#ifdef DEBUG
-  printf("width in bytes = %u\n", widthInBytes);
-  printf("padding in bytes = %u\n", padding);
-  printf("row size in bytes = %u\n", rowSizeInBytes);
-#endif
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
