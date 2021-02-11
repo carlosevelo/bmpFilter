@@ -85,13 +85,38 @@ void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
 
 void applyFilterToRow(unsigned char* row, int width, int isGrayscale) {
   //#5 Iterate over each pixel in a row calling applyFilterToPixel(pixel, isGrayscale) on each
-  //Write an equation that uses width to compute the padding that separates each row in the pixel array so that the numbers of bytes in each row is a multiple of 4
-  
+  int pixelSize = 3;
+  unsigned char* currentPixel = row;
+
+  for (size_t i = 0; i < width; i++) {
+    applyFilterToPixel(currentPixel, isGrayscale);
+    currentPixel += pixelSize;
+  }
+#ifdef DEBUG
+  printf("width in bytes = %u\n", widthInBytes);
+  printf("padding in bytes = %u\n", padding);
+  printf("row size in bytes = %u\n", rowSizeInBytes);
+#endif
 }
 
 void applyFilterToPixelArray(unsigned char* pixelArray, int width, int height, int isGrayscale) {
-  //#4 Iterate over each row in the pixel array calling applyFilterToRow(row, width. isGrayscale)
-  
+  int pixelSize = 3;
+  int widthInBytes = width * pixelSize;
+  int rowSizeInBytes = widthInBytes;
+  int padding = 0;
+  unsigned char* currentRow = pixelArray;
+
+  //Calculates how much padding to add to each row so that it is a multiple of 4
+  if (widthInBytes % 4 != 0) {
+    padding = 4 - (widthInBytes % 4);
+  }
+  rowSizeInBytes = widthInBytes + padding;
+
+  //Iterates through each row calling applyFilterToRow()
+  for (size_t i = 0; i < height; i++) {
+    applyFilterToRow(currentRow, width, isGrayscale);
+    currentRow += rowSizeInBytes;
+  }
 }
 
 void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
@@ -115,6 +140,7 @@ void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
   printf("width = %u\n", width);
   printf("height = %u\n", height);
   printf("pixelArray = %p\n", pixelArray);
+  printf("isGrayscale = %u\n", isGrayscale);
 #endif
 
   applyFilterToPixelArray(pixelArray, width, height, isGrayscale);
