@@ -64,6 +64,12 @@ unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsig
   //#9 Compute the average intensity of a pixel
   //A value of zero indicates that the color is absent, a value of 255 indicates the maximum intensity for that color for the given pixel.
   
+#ifdef DEBUG
+  printf("blue value= %p\n", blueValue);
+  printf("green value= %p\n", greenValue);
+  printf("red value= %p\n", redValue);
+#endif
+
   return 0;
 }
 
@@ -74,10 +80,11 @@ void applyGrayscaleToPixel(unsigned char* pixel) {
 
 void applyThresholdToPixel(unsigned char* pixel) {
   //#7 Write the new value of the pixel using getAverageIntensity(blue, green, red)
-  
-#ifdef DEBUG
-  printf("current pixel= %p\n", currentPixel);
-#endif
+  unsigned char blueValue = *pixel;
+  unsigned char greenValue = *pixel + 1;
+  unsigned char redValue = *pixel + 2;
+
+  getAverageIntensity(blueValue, greenValue, redValue);
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
