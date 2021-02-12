@@ -61,13 +61,7 @@ void getBmpFileAsBytes(unsigned char* ptr, unsigned fileSizeInBytes, FILE* strea
 }
 
 unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red) {
-  /*
-  unsigned int blueInt = (unsigned int)blue;
-  unsigned int greenInt = (unsigned int)green;
-  unsigned int redInt = (unsigned int)red;
-  unsigned int intAvg = (blueInt + greenInt + redInt) / 3;
-  */
-
+    
   unsigned char charAvg = (blue + green + red) / 3;
 
   return charAvg;
