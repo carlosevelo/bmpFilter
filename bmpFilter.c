@@ -74,36 +74,39 @@ unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsig
 }
 
 void applyGrayscaleToPixel(unsigned char* pixel) {
-  //#8 Write the new value of the pixel using getAverageIntensity(blue, green, red)
+  //Sets a pointer to each color in the pixel
   unsigned char* blueptr = pixel;
   unsigned char* greenptr = pixel + 1;
   unsigned char* redptr = pixel + 2;
-
-  unsigned char blueValue = *pixel;
-  unsigned char greenValue = *(pixel + 1);
-  unsigned char redValue = *(pixel + 2);
+  //Gets the value of each color in the pixel
+  unsigned char blueValue = *blueptr;
+  unsigned char greenValue = *greenptr;
+  unsigned char redValue = *redptr;
   
+  //Gets the average intersity of the pixel
   unsigned char avgIntensity = getAverageIntensity(blueValue, greenValue, redValue);
 
+  //Writes the new value of the pixel using the average pixel intensity
   *blueptr = avgIntensity;
   *greenptr = avgIntensity;
   *redptr = avgIntensity;
-
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
-  //Write the new value of the pixel using getAverageIntensity(blue, green, red)
+  //Sets a pointer to each color in the pixel
   unsigned char* blueptr = pixel;
   unsigned char* greenptr = pixel + 1;
   unsigned char* redptr = pixel + 2;
+  //Gets the value of each color in the pixel
+  unsigned char blueValue = *blueptr;
+  unsigned char greenValue = *greenptr;
+  unsigned char redValue = *redptr;
 
-  unsigned char blueValue = *pixel;
-  unsigned char greenValue = *(pixel + 1);
-  unsigned char redValue = *(pixel + 2);
-
+  //Gets the average intersity of the pixel
   unsigned char avgIntensity = getAverageIntensity(blueValue, greenValue, redValue);
   //unsigned int intense = (unsigned int)avgIntensity;
 
+  //Writes the new value of the pixel using the average pixel intensity
   if (avgIntensity >= 128) {
     *blueptr = 0xff;
     *greenptr = 0xff;
@@ -163,24 +166,17 @@ void parseHeaderAndApplyFilter(unsigned char* bmpFileAsBytes, int isGrayscale) {
   int height = 0;
   unsigned char* pixelArray = NULL;
 
-  //#1 Use header.png to set offsetFirstBytePixelArray
+  //Sets offsetFirstBytePixelArray
   offsetFirstBytePixelArray =  *(int *)(bmpFileAsBytes + 10);
 
-  //#2 Use DIBHeader.png to set width and height
+  //Sets width and height
   width = *(int *)(bmpFileAsBytes + 14 + 4);
   height = *(int *)(bmpFileAsBytes + 14 + 8);
 
-  //#3 Use offsetFirstBytePixelArray to set the pixelArray to the start of the pixel array
+  //Set the pixelArray to the start of the pixel array
   pixelArray = bmpFileAsBytes + offsetFirstBytePixelArray;
 
-#ifdef DEBUG
-  printf("offsetFirstBytePixelArray = %u\n", offsetFirstBytePixelArray);
-  printf("width = %u\n", width);
-  printf("height = %u\n", height);
-  printf("pixelArray = %p\n", pixelArray);
-  printf("isGrayscale = %u\n", isGrayscale);
-#endif
-
+  //Iteratively applys filters to pixel in array
   applyFilterToPixelArray(pixelArray, width, height, isGrayscale);
 }
 
