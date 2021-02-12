@@ -61,30 +61,59 @@ void getBmpFileAsBytes(unsigned char* ptr, unsigned fileSizeInBytes, FILE* strea
 }
 
 unsigned char getAverageIntensity(unsigned char blue, unsigned char green, unsigned char red) {
-  //#9 Compute the average intensity of a pixel
-  //A value of zero indicates that the color is absent, a value of 255 indicates the maximum intensity for that color for the given pixel.
-  
-#ifdef DEBUG
-  printf("blue value= %p\n", blueValue);
-  printf("green value= %p\n", greenValue);
-  printf("red value= %p\n", redValue);
-#endif
+  /*
+  unsigned int blueInt = (unsigned int)blue;
+  unsigned int greenInt = (unsigned int)green;
+  unsigned int redInt = (unsigned int)red;
+  unsigned int intAvg = (blueInt + greenInt + redInt) / 3;
+  */
 
-  return 0;
+  unsigned char charAvg = (blue + green + red) / 3;
+
+  return charAvg;
 }
 
 void applyGrayscaleToPixel(unsigned char* pixel) {
   //#8 Write the new value of the pixel using getAverageIntensity(blue, green, red)
+  unsigned char* blueptr = pixel;
+  unsigned char* greenptr = pixel + 1;
+  unsigned char* redptr = pixel + 2;
+
+  unsigned char blueValue = *pixel;
+  unsigned char greenValue = *(pixel + 1);
+  unsigned char redValue = *(pixel + 2);
   
+  unsigned char avgIntensity = getAverageIntensity(blueValue, greenValue, redValue);
+
+  *blueptr = avgIntensity;
+  *greenptr = avgIntensity;
+  *redptr = avgIntensity;
+
 }
 
 void applyThresholdToPixel(unsigned char* pixel) {
-  //#7 Write the new value of the pixel using getAverageIntensity(blue, green, red)
-  unsigned char blueValue = *pixel;
-  unsigned char greenValue = *pixel + 1;
-  unsigned char redValue = *pixel + 2;
+  //Write the new value of the pixel using getAverageIntensity(blue, green, red)
+  unsigned char* blueptr = pixel;
+  unsigned char* greenptr = pixel + 1;
+  unsigned char* redptr = pixel + 2;
 
-  getAverageIntensity(blueValue, greenValue, redValue);
+  unsigned char blueValue = *pixel;
+  unsigned char greenValue = *(pixel + 1);
+  unsigned char redValue = *(pixel + 2);
+
+  unsigned char avgIntensity = getAverageIntensity(blueValue, greenValue, redValue);
+  //unsigned int intense = (unsigned int)avgIntensity;
+
+  if (avgIntensity >= 128) {
+    *blueptr = 0xff;
+    *greenptr = 0xff;
+    *redptr = 0xff;
+  }
+  else {
+    *blueptr = 0x00;
+    *greenptr = 0x00;
+    *redptr = 0x00;  
+  }
 }
 
 void applyFilterToPixel(unsigned char* pixel, int isGrayscale) {
